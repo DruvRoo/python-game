@@ -312,9 +312,9 @@ def battleUItemp(enemy):
                 else:
                     hpPot(enemy)
             if choice == 3:
-                pass
+                playerINSP(enemy)
             if choice == 4:
-                pass
+                playerDEF(enemy)
             else:
                 input("Invalid input. Press Enter to try again.")
                 battleUItemp(enemy)
@@ -322,6 +322,10 @@ def battleUItemp(enemy):
             input("Invalid input. Press Enter to try again.")
             battleUItemp(enemy)
 
+# ================================================== #
+#####                            #####
+##### ===== BATTLE ACTIONS ===== #####
+#####                            #####
 
 ###                           ###
 ### === Enemy Attack Turn === ###
@@ -374,6 +378,7 @@ def enemyATK(enemy):
                 time.sleep(0.5)
                 gameOver()
             os.system('cls')
+            player.hp = round(player.hp, 2)
             fightUI1 = (
                 "========================================\n"
                 f"{player.name}: {player.hp}/{player.hpMax}\n"
@@ -391,7 +396,9 @@ def enemyATK(enemy):
         input("\nPress Enter to continue.")
     battleUItemp(enemy)
 
-## == Player Attack Choice == ##
+###                            ###
+### === Player Attack Turn === ###
+###                            ###
 def playerATK(enemy):
     # Player attack
     global Enemy
@@ -458,6 +465,7 @@ def playerATK(enemy):
             rewards()
         
         os.system('cls')
+        enemy.hp = round(enemy.hp, 2)
         fightUI1 = (
             "========================================\n"
             f"{player.name}: {player.hp}/{player.hpMax}\n"
@@ -474,6 +482,130 @@ def playerATK(enemy):
 
     time.sleep(2)
     enemyATK(enemy)
+
+###                          ###
+### ===== Defense Turn ===== ###
+###                          ###
+def playerDEF(enemy):
+    global Enemy
+    os.system('cls')
+    fightUI1 = (
+                "========================================\n"
+                f"{player.name}: {player.hp}/{player.hpMax}\n"
+                f"{enemy.name}: {enemy.hp}/{enemy.hpMax}\n"
+                "========================================\n"
+                )
+    fightUI2 = (
+                "1 • Attack             3 • Inspect\n"
+                "2 • Heal               4 • Defend\n"
+                )
+    print(fightUI1)
+    print(fightUI2)
+    print("You raised your guard.")
+    time.sleep(1)
+    # enemy dmg calc -> defense reduce final dmg -> enemy final dmg output
+
+    if enemy.hp > 0:
+        if random.random() < player.dodge:
+            os.system('cls')
+            fightUI1 = (
+                "========================================\n"
+                f"{player.name}: {player.hp}/{player.hpMax}\n"
+                f"{enemy.name}: {enemy.hp}/{enemy.hpMax}\n"
+                "========================================\n"
+                )
+            fightUI2 = (
+                "1 • Attack             3 • Inspect\n"
+                "2 • Heal               4 • Defend\n"
+                )
+            print(fightUI1)
+            print(fightUI2)
+            print(f"The {enemy.name} missed!")
+        else:
+            isCrit = random.random() < enemy.critC
+            finalDMGenemy = random.randint(enemy.dmg - 3, enemy.dmg + 3)
+
+            if isCrit:
+                finalDMGenemy *= enemy.critM
+                os.system('cls')
+                fightUI1 = (
+                    "========================================\n"
+                    f"{player.name}: {player.hp}/{player.hpMax}\n"
+                    f"{enemy.name}: {enemy.hp}/{enemy.hpMax}\n"
+                    "========================================\n"
+                    )
+                fightUI2 = (
+                    "1 • Attack             3 • Inspect\n"
+                    "2 • Heal               4 • Defend\n"
+                    )
+                print(fightUI1)
+                print(fightUI2)
+                print(f"\nThe {enemy.name} hit a CRITICAL HIT!!")
+                time.sleep(1)
+            
+            ## Final DMG cut in half due to guard
+            finalDMGenemy /= 2
+            player.hp -= round(finalDMGenemy, 2)
+            if player.hp <= 0:
+                player.hp = 0
+                print(f"The {enemy.name} has dealt {finalDMGenemy}!")
+                time.sleep(1)
+                gameOver()
+            os.system('cls')
+            fightUI1 = (
+                "========================================\n"
+                f"{player.name}: {player.hp}/{player.hpMax}\n"
+                f"{enemy.name}: {enemy.hp}/{enemy.hpMax}\n"
+                "========================================\n"
+                    )
+            fightUI2 = (
+                "1 • Attack             3 • Inspect\n"
+                "2 • Heal               4 • Defend\n"
+                    )
+            print(fightUI1)
+            print(fightUI2)    
+            print(f"The {enemy.name} has dealt {finalDMGenemy}!")
+        time.sleep(0.5)
+        input("\nPress Enter to continue.")
+    battleUItemp(enemy)
+
+###                           ###
+### ===== Enemy Inspect ===== ###
+###                           ###
+def playerINSP(enemy):
+    global Enemy
+    # should tell the name, hp, dmg, crit chance and multi, and the dodge chance of the enemy
+    os.system('cls')
+    fightUI1 = (
+                "========================================\n"
+                f"{player.name}: {player.hp}/{player.hpMax}\n"
+                f"{enemy.name}: {enemy.hp}/{enemy.hpMax}\n"
+                "========================================\n"
+                )
+    fightUI2 = (
+                "1 • Attack             3 • Inspect\n"
+                "2 • Heal               4 • Defend\n"
+                )
+    print(fightUI1)
+    print(fightUI2)
+
+    inspectStats = (
+            f"Enemy: {enemy.name}\n"
+            f"Damage range: {enemy.dmg - 3} ~ {enemy.dmg + 3}\n"
+            f"Crit Chance: {enemy.critC * 100}%\n"
+            f"Crit Multiplier: {enemy.critM}x\n"
+            f"Dodge Chance: {enemy.dodge * 100}%\n\n"
+                )
+    for char in inspectStats:
+        sys.stdout.write(char)
+        sys.stdout.flush()
+        time.sleep(0.005)
+
+    time.sleep(1)
+    input("Press Enter to continue.")
+    battleUItemp(enemy)
+
+# ================================================== #
 
 ###                        ###
 ### === REWARDS SYSTEM === ###
@@ -700,7 +832,7 @@ def merchantShopTemp():
                 f"Gold Amount: {p.gold} Gold\n\n"
                     )
             print(shopUI4)
-            choiceBuy = input("Buying Health Potion: Confirm? (y or n): ")
+            choiceBuy = input("Buying Power Up Necklace: Confirm? (y or n): ")
             validChoice = ["y", "Y", "n", "N"]
 
             while choiceBuy not in validChoice:
@@ -717,7 +849,7 @@ def merchantShopTemp():
                     f"Gold Amount: {p.gold} Gold\n\n"
                     )
                 print(shopUI4)
-                choiceBuy = input("Buying Health Potion: Confirm? (Y or N): ")
+                choiceBuy = input("Buying Power Up Necklace: Confirm? (Y or N): ")
             
             ## Yes or No
             if choiceBuy == "y" or choiceBuy == "Y":
@@ -756,7 +888,7 @@ def merchantShopTemp():
                 f"Gold Amount: {p.gold} Gold\n\n"
                     )
             print(shopUI4)
-            choiceBuy = input("Buying Health Potion: Confirm? (y or n): ")
+            choiceBuy = input("Buying HP Necklace: Confirm? (y or n): ")
             validChoice = ["y", "Y", "n", "N"]
 
             while choiceBuy not in validChoice:
@@ -773,7 +905,7 @@ def merchantShopTemp():
                     f"Gold Amount: {p.gold} Gold\n\n"
                     )
                 print(shopUI4)
-                choiceBuy = input("Buying Health Potion: Confirm? (Y or N): ")
+                choiceBuy = input("Buying HP Necklace: Confirm? (Y or N): ")
             
             ## Yes or No
             if choiceBuy == "y" or choiceBuy == "Y":
@@ -812,6 +944,7 @@ def merchantShopTemp():
             print(shopUI4)
             print("You decided to continue on your journey. . .")
             time.sleep(1)
+            p.hp = p.hpMax
             rooms()
 def end():
     pass
