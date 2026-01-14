@@ -1,7 +1,7 @@
 # python-game
 This python game is for my finals. The code is VERY unoptimized as I only learned how to use python at the start of January this year.
 
-(THE GAME IS STILL NOT DONE)
+##(THE GAME FILE IS THE "AverageGame.py" ONE, THE "actualGame.py" IS JUST THERE FOR TESTING PURPOSES)##
 
 The code I used as a basis was a post from reddit that was 5 years ago by a guy called GagaGievous. As I browsed his github page, I saw a tutorial that was made by him, and so I followed it and that's how my game turned out.
 
