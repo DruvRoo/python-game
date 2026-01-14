@@ -73,11 +73,11 @@ def dragon():
 def spawn_enemy(template_func, room):
     e = template_func()   # new Enemy
 
-    scale = 1 + room * 0.25
+    scale = 1 + room * 0.50
 
-    e.hp = round(int(e.hp * scale), 2)
+    e.hp = round(int((5 + e.hp) * scale), 2)
     e.hpMax = e.hp
-    e.dmg = round(int(e.dmg * scale), 2)
+    e.dmg = round(int((5 + e.dmg) * scale), 2)
 
     return e
 
@@ -513,6 +513,7 @@ def playerATK(enemy):
             input("\n\nPress Enter to continue.")
             if enemy.name == "Dragon":
                 victoryScreen()
+            rewards()
         
         os.system('cls')
         enemy.hp = round(enemy.hp, 2)
@@ -719,7 +720,7 @@ def rewards():
         print("[Minor CRIT CHANCE increase!]")
     
     player.dmg *= 1.1
-    player.hpMax *= 1.35
+    player.hpMax *= 1.2
     round(p.dmg, 2)
     round(p.hpMax, 2)
     round(player.dmg, 2)
@@ -1321,7 +1322,7 @@ def merchantShop2():
         time.sleep(0.005)
     shopUI2 = (
         "1 • Health Potion Upgrade (200 Gold)        3 • HP Band (200 Gold)\n"
-        "2 • Power Up Band (250 Gold)    4 • Quit\n"
+        "2 • Power Up Band (250 Gold)                4 • Quit\n"
         "===================================================================\n"
         f"Gold Amount: {p.gold} Gold\n\n"
             )
