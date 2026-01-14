@@ -148,9 +148,6 @@ def setupGame():
         time.sleep(0.05)
     playerName = input("‣ ")
     player.name = playerName
-    ## TESTING PURPOSES ##
-    if player.name == "boss":
-        bossRoom = True
 
     # == Class == #
     os.system('cls')
@@ -217,9 +214,6 @@ def setupGame():
         sys.stdout.flush()
         time.sleep(0.04)
     time.sleep(1)
-    ## FOR TESTING PURPOSES ##
-    if bossRoom == True:
-        boss()
     rooms()
 def victoryScreen():
     os.system('cls')
